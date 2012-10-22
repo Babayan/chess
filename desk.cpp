@@ -217,7 +217,8 @@ figure* desk::getKing(int color)
 				if(getVandak(i,j)->getName()=="King" && getVandak(i,j)->getColor()==color)
 				{
 					return getVandak(i,j);
-				}
+                }
+    return 0;
 }
 
 tox& desk::getLastMove() const
