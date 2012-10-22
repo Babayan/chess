@@ -1,4 +1,9 @@
 #include "figure.h"
+#include "pawn.h"
+#include "knight.h"
+#include "king.h"
+#include "bishop.h"
+#include "rook.h"
 #include "desk.h"
 #include <iostream>
 
@@ -41,320 +46,6 @@ desk::desk()
 	vandak[5][1] = new King(5, 1, 0);
 	vandak[5][8] = new King(5, 8, 1);
 }
-
-bool desk::PawnMoveIsPossible(const figure& qar, const int x, const int y, bool printError)
-{
-	if (qar.getColor()==0)
-	{
-		if((vandak[x][y]!=0) & (abs(x-qar.getX())==1))
-		{
-				
-			if(y-qar.getY()==1)
-				return true;
-			if((x==qar.getX() && x==5) && (getVandak(x,y)->lastycoord==7))
-				return true;
-		}
-		if((vandak[x][y]==0) & (x==qar.getX()))
-		{
-			if(y==qar.getY()+1)
-				return true;
-			if((y==4) & (qar.getY()==2))
-				return true;
-		}
-		if((qar.getY()==5) & (abs(qar.getX()-x)==1) & (lastmove.coord11==lastmove.coord21) & (lastmove.coord11==x) & (lastmove.coord12-2==lastmove.coord22))
-		{
-			vandak[x][y-1]=0;
-			return true;
-		}
-	}
-	if (qar.getColor()==1)
-	{
-		if((vandak[x][y]!=0) & (abs(x-qar.getX())==1))
-		{
-			if(y-qar.getY()==-1)
-				return true;
-			if(x==qar.getX() && x==4 && getVandak(x,y)->lastycoord==2)
-				return true;
-		}
-		if(vandak[x][y]==0 && x==qar.getX())
-		{
-			if(y==qar.getY()-1)
-				return true;
-			if(y==5 && qar.getY()==7)
-				return true;
-		}
-		if(qar.getY()==4 && abs(qar.getX()-x)==1 && lastmove.coord11==lastmove.coord21 && lastmove.coord11==x && lastmove.coord12+2==lastmove.coord22)
-		{
-			vandak[x][y+1]=0;
-			return true;
-		}
-	}
-	if(printError)
-		cout<<endl<<"Sxal: Peshkan chi karox aydpes sharjvel"<<endl<<endl;
-	return false;
-}
-
-bool desk::RookMoveIsPossible(const figure& qar, const int x, const int y, bool printError)
-{
-	if(x==qar.getX())
-	{
-		int mec;
-		int poqr;
-
-		if (y>qar.getY())
-		{
-			poqr=qar.getY();
-			mec=y;
-		}
-		else  
-		{
-			poqr=y;
-			mec=qar.getY();
-		}
-
-		if (mec-poqr>1)
-		{
-
-			for(int i=poqr+1; i<mec; i++)
-				if (vandak[x][i])
-				{
-					if(printError)
-						cout<<endl<<"Sxal: Ladyan chi karox karox trnel urish qari vrayov"<<endl<<endl;
-					return false;
-				}
-				return true;
-		}
-	}
-
-	else if(y==qar.getY())
-		{
-			int mec;
-			int poqr;
-
-			if (x>qar.getX())
-			{
-				poqr=qar.getX();
-				mec=x;
-			}
-			else  
-			{
-				poqr=x;
-				mec=qar.getX();
-			}
-
-			if (mec-poqr>1)
-			{
-				for(int i=poqr+1; i<mec; i++)
-				if (vandak[i][y])
-				{
-					if(printError)
-						cout<<endl<<"Sxal: Ladyan chi karox trnel urish qari vrayov"<<endl<<endl;
-					return false;
-				}
-				return true;
-			}
-		}  
-	else
-		return false;
-};
-
-bool desk::KnightMoveIsPossible(const figure& qar, const int x, const int y, bool printError)
-{
-	if((abs(x-qar.getX())==1 && abs(y-qar.getY())==2) || (abs(x-qar.getX())==2 && abs(y-qar.getY())==1))
-		return true;
-	else
-	{
-		if(printError)
-			cout<<endl<<"Sxal: Dzin chi karox aydpes sharjvel"<<endl<<endl;
-		return false;
-	}
-
-}
-
-bool desk::BishopMoveIsPossible(const figure& qar, const int x, const int y, bool printError)
-{
-	bool flag=true;
-	if (x-y==qar.getX()-qar.getY() || x+y==qar.getX()+qar.getY())
-	{
-		//flag=true;
-		if (abs(x-qar.getX())>1)
-		{
-			if (x<qar.getX() && y<qar.getY())
-				for(int i=x+1; i<=qar.getX()-1; i++)
-					for(int j=y+1; j<=qar.getY()-1; j++)
-						if(vandak[i][j]!=0 && i-j==x-y)
-						{
-							if(printError)
-								cout<<endl<<"Sxal: Pixy chi karox trnel urish xaxaqari vrayov"<<endl<<endl;
-							return false;
-						};
-			if (x>qar.getX() && y>qar.getY())
-				for(int i=qar.getX()+1; i<=x-1; i++)
-					for(int j=qar.getY()+1; j<=y-1; j++)
-						if(vandak[i][j]!=0 && i-j==x-y)
-						{
-							if(printError)
-								cout<<endl<<"Sxal: Pixy chi karox trnel urish xaxaqari vrayov"<<endl<<endl;
-							return false;
-						};
-			if (x>qar.getX() && y<qar.getY())
-				for(int i=qar.getX()+1; i<=x-1; i++)
-					for(int j=y+1; j<=qar.getY()-1; j++)
-						if(vandak[i][j]!=0 && i+j==x+y)
-						{
-							if(printError)
-								cout<<endl<<"Sxal: Pixy chi karox trnel urish xaxaqari vrayov"<<endl<<endl;
-							return false;
-						};
-			if (x<qar.getX() && y>qar.getY())
-				for(int i=x+1; i<=qar.getX()-1; i++)
-					for(int j=qar.getY()+1; j<=y-1; j++)
-						if(vandak[i][j]!=0 && i+j==x+y)
-						{
-							if(printError)
-								cout<<endl<<"Sxal: Pixy chi karox trnel urish xaxaqari vrayov"<<endl<<endl;
-							return false;
-						};
-
-
-		}
-	}
-
-	else
-		{
-			if(printError)
-				cout<<endl<<"Sxal: Pixy chi karox aydpes sharjvel"<<endl<<endl;
-			return false;
-		}
-	return flag;
-}
-
-bool desk::QueenMoveIsPossible(const figure& qar, const int x, const int y, bool printError)
-{
-	bool flag=false;
-	//ete ankyunagceri vraya verjnakan kety
-	if (x-y==qar.getX()-qar.getY() || x+y==qar.getX()+qar.getY())
-	{
-		flag=true;
-		//ete aranqum gone mi vandak ka
-		if (abs(x-qar.getX())>1)
-		{
-			if (x<qar.getX() && y<qar.getY())
-				for(int i=x+1; i<=qar.getX()-1; i++)
-					for(int j=y+1; j<=qar.getY()-1; j++)
-						if(vandak[i][j]!=0 && i-j==x-y)
-						{
-							if(printError)
-								cout<<endl<<"Sxal: Taguhin chi karox trnel urish xaxaqari vrayov"<<endl<<endl;
-							return false;
-						};
-			if ((x>qar.getX()) && (y>qar.getY()))
-				for(int i=qar.getX()+1; i<=x-1; i++)
-					for(int j=qar.getY()+1; j<=y-1; j++)
-						if(vandak[i][j]!=0 && i-j==x-y)
-						{
-							if(printError)
-								cout<<endl<<"Sxal: Taguhin chi karox trnel urish xaxaqari vrayov"<<endl<<endl;
-							return false;
-						};
-			if (x>qar.getX() && y<qar.getY())
-				for(int i=qar.getX()+1; i<=x-1; i++)
-					for(int j=y+1; j<=qar.getY()-1; j++)
-						if(vandak[i][j]!=0 && i+j==x+y)
-						{
-							if(printError)
-								cout<<endl<<"Sxal: Taguhin chi karox trnel urish xaxaqari vrayov"<<endl<<endl;
-							return false;
-						};
-			if (x<qar.getX() && y>qar.getY())
-				for(int i=x+1; i<=qar.getX()-1; i++)
-					for(int j=qar.getY()+1; j<=y-1; j++)
-						if(vandak[i][j]!=0 && i+j==x+y)
-						{
-							if(printError)
-								cout<<endl<<"Sxal: Taguhin chi karox trnel urish xaxaqari vrayov"<<endl<<endl;
-							return false;
-						};
-
-
-		}
-	}
-
-	if(x==qar.getX())
-	{
-		flag=true;
-		int mec;
-		int poqr;
-
-		if (y>qar.getY())
-		{
-			poqr=qar.getY();
-			mec=y;
-		}
-		else  
-		{
-			poqr=y;
-			mec=qar.getY();
-		}
-
-		if (mec-poqr>1)
-		{
-
-			for(int i=poqr+1; i<mec; i++)
-				if (vandak[x][i])
-				{
-					if(printError)
-						cout<<endl<<"Sxal: Taguhin chi karox trnel urish qari vrayov"<<endl<<endl;
-					return false;
-				}
-				return true;
-		}
-	}
-
-	else if(y==qar.getY())
-		{
-			flag=true;
-			int mec;
-			int poqr;
-
-			if (x>qar.getX())
-			{
-				poqr=qar.getX();
-				mec=x;
-			}
-			else  
-			{
-				poqr=x;
-				mec=qar.getX();
-			}
-
-			if (mec-poqr>1)
-			{
-				for(int i=poqr+1; i<mec; i++)
-				if (vandak[i][y])
-				{
-					if(printError)
-						cout<<endl<<"Sxal qayl: Taguhin chi karox trnel urish qari vrayov"<<endl<<endl;
-					return false;
-				}
-				return true;
-			}
-		}  
-	return flag;
-}
-
-bool desk::KingMoveIsPossible(const figure& qar, const int x, const int y, bool printError)
-{
-	if((abs(qar.getX()-x)==1 && qar.getY()==y) || (abs(qar.getY()-y)==1 && qar.getX()==x) || (abs(qar.getX()-x)==1 && abs(qar.getY()-y)==1))
-		return true;
-	else
-	{
-		//stex inch vor error@ etqan el chisht chem grel, chnayac harca
-		if(printError)
-			cout<<endl<<"Sxal: Tagavory chi karox mek vandakic avel trnel"<<endl<<endl;
-		return false;
-	}
-};
 
 bool desk::Check(int guyn)
 {
@@ -427,6 +118,7 @@ bool desk::MoveIsPossible(const figure& qar, const int x, const int y, bool prin
 
 	if(x<1 ||x>8 ||y<1 ||y>8)
 		return false;
+
 	if(qar.getX()==x && qar.getY()==y) //Stugum e, ardyoq xaxaqary texapoxvel e.
 	{
 		if(printError)
@@ -434,48 +126,8 @@ bool desk::MoveIsPossible(const figure& qar, const int x, const int y, bool prin
 		return false;
 	}
 
-	if(qar.getName()=="Pawn")
-	{
-		if(PawnMoveIsPossible(qar, x, y, printError))
-		{
-		veradardz=true;
-		}
-	}
-	if(qar.getName()=="Rook")
-	{
-		if(RookMoveIsPossible(qar, x, y, printError))
-		{
-		veradardz=true;
-		}
-	}
-	if(qar.getName()=="Knight")
-	{
-		if(KnightMoveIsPossible(qar, x, y, printError))
-		{
-		veradardz=true;
-		}
-	}
-	if(qar.getName()=="Bishop")
-	{
-		if(BishopMoveIsPossible(qar, x, y, printError))
-		{
-		veradardz=true;
-		}
-	}
-	if(qar.getName()=="Queen")
-	{
-		if(QueenMoveIsPossible(qar, x, y, printError))
-		{
-		veradardz=true;
-		}
-	}
-	if(qar.getName()=="King")
-	{
-		if(KingMoveIsPossible(qar, x, y, printError))
-		{
-		veradardz=true;
-		}
-	}
+	veradardz=qar.moveIsPossible();
+
 	if (veradardz==true && getVandak(x,y)!=0)
 	{
 		if (getVandak(x,y)->getColor()==getVandak(qar.getX(),qar.getY())->getColor())
@@ -542,7 +194,7 @@ bool desk::makeShortCastling(int guyn)
 	return false;
 }
 
-figure* desk::getVandak(int x, int y)
+const figure* const desk::getVandak(int x, int y) const
 {
 	if (vandak[x][y])
 	return vandak[x][y];
@@ -558,6 +210,11 @@ figure* desk::getKing(int color)
 				{
 					return getVandak(i,j);
 				}
+}
+
+tox& desk::getLastMove() const
+{
+	return lastmove;
 }
 
 void desk::printDesk()

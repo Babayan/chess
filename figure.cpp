@@ -29,3 +29,8 @@ void figure::setY(int y)
 {
 	coordinate_y = y;
 }
+
+bool figure::isPawnSpecMove() const
+{
+	return false;
+}

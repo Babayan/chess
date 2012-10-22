@@ -17,23 +17,11 @@ class desk
 {
 private:
 	figure* vandak[9][9];
-	tox lastmove;
+	mutable tox lastmove;
 
 public:
 	bool check;
 	desk();
-
-	bool PawnMoveIsPossible(const figure& qar, const int x, const int y, bool printError);
-
-	bool RookMoveIsPossible(const figure& qar, const int x, const int y, bool printError);
-
-	bool KnightMoveIsPossible(const figure& qar, const int x, const int y, bool printError);
-
-	bool BishopMoveIsPossible(const figure& qar, const int x, const int y, bool printError);
-
-	bool QueenMoveIsPossible(const figure& qar, const int x, const int y, bool printError);
-
-	bool KingMoveIsPossible(const figure& qar, const int x, const int y, bool printError);
 
 	bool Check(int guyn);
 
@@ -47,9 +35,11 @@ public:
 
 	bool makeShortCastling(int guyn);
 
-	figure* getVandak(int x, int y);
+	const figure* const getVandak(int x, int y) const;
 
 	figure* getKing(int color);
+
+	tox& getLastMove() const;
 
 	void printDesk();
 
