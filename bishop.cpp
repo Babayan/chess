@@ -30,7 +30,8 @@ bool Bishop::moveIsPossible(const desk& d, int x, int y, bool printError) const
 					std::cout<<std::endl<<"Sxal: Pixy chi karox trnel urish xaxa vrayov"<<std::endl<<std::endl;
 				return false;
 			}
-		}
+        }
+        return true;
 	} else  if(x+y==getX()+getY()) {
 		int minX = std::min(x, getX()); // 2
 		int maxX = std::max(x, getX()); // 7
@@ -41,7 +42,8 @@ bool Bishop::moveIsPossible(const desk& d, int x, int y, bool printError) const
 					std::cout<<std::endl<<"Sxal: Pixy chi karox trnel urish xaxa vrayov"<<std::endl<<std::endl;
 				return false;
 			}
-		}
+        }
+        return true;
 	}
 	if(printError)
 		std::cout<<std::endl<<"Sxal: Pixy chi karox aydpes sharjvel"<<std::endl<<std::endl;
