@@ -127,7 +127,7 @@ bool desk::MoveIsPossible(const figure& qar, const int x, const int y, bool prin
 		return false;
 	}
 
-	veradardz=qar.moveIsPossible();
+	veradardz=qar.moveIsPossible(*this, x, y, printError);
 
 	if (veradardz==true && getVandak(x,y)!=0)
 	{
@@ -196,6 +196,13 @@ bool desk::makeShortCastling(int guyn)
 }
 
 const figure* const desk::getVandak(int x, int y) const
+{
+	if (vandak[x][y])
+	return vandak[x][y];
+	else return 0;
+}
+
+figure* desk::getVandak(int x, int y)
 {
 	if (vandak[x][y])
 	return vandak[x][y];

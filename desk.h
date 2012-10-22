@@ -40,6 +40,8 @@ public:
 
 	const figure* const getVandak(int x, int y) const;
 
+	figure* getVandak(int x, int y);
+
 	figure* getKing(int color);
 
 	tox& getLastMove() const;
