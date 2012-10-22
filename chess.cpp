@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <math.h>
+#include <cstdlib>
 
 using namespace std; //s
 
@@ -195,7 +196,7 @@ public:
 
 
 
-void main()
+int main()
 {
 	int i(1);
 	
@@ -235,5 +236,6 @@ void main()
 		{
 		}
 		while (player2.makeMove(rdeskk)==false);
-	}
+    }
+    return 0;
 }

@@ -83,7 +83,7 @@ bool desk::KingIsProtected(figure& qar, const int x, const int y, bool printErro
 	//paymanakan katarum enq qayl@
 	int x0=qar.getX();
 	int y0=qar.getY();
-	vandak[x0][y0]=nullptr;
+    vandak[x0][y0]=0;
 	vandak[x][y]=&qar;
 	qar.setX(x);
 	qar.setY(y);
@@ -99,14 +99,14 @@ bool desk::KingIsProtected(figure& qar, const int x, const int y, bool printErro
 					if(printError)
 					cout<<endl<<"Sxal: Hetevyal qaylov duq harvaci tak eq dnum dzer tagavorin"<<endl<<endl;
 
-					vandak[x][y]=nullptr;
+                    vandak[x][y]=0;
 					vandak[x0][y0]=&qar;
 					qar.setX(x0);
 					qar.setY(y0);
 					return false;
 				}
 		}
-			vandak[x][y]=nullptr;
+            vandak[x][y]=0;
 			vandak[x0][y0]=&qar;
 			qar.setX(x0);
 			qar.setY(y0);
@@ -147,7 +147,7 @@ bool desk::MoveIsPossible(const figure& qar, const int x, const int y, bool prin
 
 bool desk::setCoordinates(figure& qar,const int x,const int y)
 {
-		vandak[qar.getX()][qar.getY()]=nullptr;
+        vandak[qar.getX()][qar.getY()]=0;
 
 		//lastmove um hishum enq verjin qayl@
 		lastmove.coord11=qar.getX();
