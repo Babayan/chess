@@ -1,6 +1,6 @@
 #include "figure.h"
 
-class Knight: public figure
+class Knight: public figure //
 {
 public:
 Knight(const int x, const int y, int guyn);

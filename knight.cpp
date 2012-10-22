@@ -3,7 +3,7 @@
 #include "knight.h"
 #include "desk.h"
 
-char Knight::getTar() const
+char Knight::getTar() const //
 {
 	return 'N';
 }

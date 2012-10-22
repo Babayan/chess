@@ -1,6 +1,6 @@
 #include "figure.h"
 
-class Queen: public figure
+class Queen: public figure //
 {
 public:
 

@@ -2,7 +2,7 @@
 
 class desk;
 
-class figure
+class figure //
 {
 public:
 	enum  colorr {white, black};

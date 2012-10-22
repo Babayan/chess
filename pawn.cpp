@@ -4,7 +4,7 @@
 #include "desk.h"
 
 
-Pawn::Pawn(const int x, const int y, int guyn)
+Pawn::Pawn(const int x, const int y, int guyn) //
 	: figure(x, y, guyn), specMove(false)
 {
 }

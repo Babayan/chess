@@ -13,7 +13,7 @@ std::string Bishop::getName() const
 	return "Bishop";
 }
 
-Bishop::Bishop(const int x, const int y, int guyn)
+Bishop::Bishop(const int x, const int y, int guyn) //d
 	: figure(x, y, guyn)
 {
 }

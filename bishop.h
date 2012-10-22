@@ -3,7 +3,7 @@
 class Bishop: public figure
 {
 public:
-	char getTar() const;
+	char getTar() const; //d
 
 	std::string getName() const;
 

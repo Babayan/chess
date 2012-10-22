@@ -7,7 +7,7 @@
 #include "desk.h"
 #include <iostream>
 
-using namespace std;
+using namespace std; //
 
 desk::desk()
 {

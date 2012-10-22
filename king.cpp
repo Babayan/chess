@@ -1,7 +1,7 @@
 #include <iostream>
 #include "king.h"
 
-char King::getTar() const
+char King::getTar() const //
 {
 	return 'K';
 }

@@ -1,6 +1,6 @@
 #include "figure.h"
 
-class Pawn: public figure
+class Pawn: public figure //
 {
 private:
 	mutable bool specMove;

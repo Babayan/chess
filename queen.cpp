@@ -2,7 +2,7 @@
 #include "queen.h"
 
 
-char Queen::getTar() const
+char Queen::getTar() const //
 {
 	return 'Q';
 }

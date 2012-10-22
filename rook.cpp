@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-char Rook::getTar() const
+char Rook::getTar() const //
 {
 	return 'R';
 }

@@ -2,7 +2,7 @@
 
 class figure;
 
-struct tox
+struct tox //
 {
 	char figure;
 	int coord11;

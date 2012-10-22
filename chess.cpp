@@ -4,7 +4,7 @@
 #include <string>
 #include <math.h>
 
-using namespace std;
+using namespace std; //s
 
 tox* toxi_dasavorich(std::string x)
 {

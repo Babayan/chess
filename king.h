@@ -1,6 +1,6 @@
 #include "figure.h"
 
-class King: public figure
+class King: public figure //
 {
 public:
 	char getTar() const;

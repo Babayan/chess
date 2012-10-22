@@ -5,7 +5,7 @@ figure::figure(int x, int y, int c)
 {
 }
 
-const int figure::getColor() const
+const int figure::getColor() const //
 {
 	return color;
 }
