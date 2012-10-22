@@ -1,5 +1,6 @@
 #include <iostream>
 #include "queen.h"
+#include "desk.h"
 
 
 char Queen::getTar() const //
@@ -17,7 +18,7 @@ Queen::Queen(const int x, const int y, int guyn)
 {
 }
 
-bool Queen::moveIsPossible(const desk& d, const int x, const int y, bool printError)
+bool Queen::moveIsPossible(const desk& d, const int x, const int y, bool printError) const
 {
 	if(x==getX())
 	{

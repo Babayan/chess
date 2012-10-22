@@ -1,3 +1,6 @@
+#ifndef CHESS_ROOK_H
+#define CHESS_ROOK_H
+
 #include "figure.h"
 
 class Rook: public figure //
@@ -12,3 +15,4 @@ public:
 	bool moveIsPossible(const desk&, int, int, bool) const;
 };
 
+#endif

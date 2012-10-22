@@ -1,3 +1,6 @@
+#ifndef CHESS_KING_H
+#define CHESS_KING_H
+
 #include "figure.h"
 
 class King: public figure //
@@ -11,3 +14,5 @@ public:
 
 	virtual bool moveIsPossible(const desk&, int, int, bool) const;
 };
+
+#endif

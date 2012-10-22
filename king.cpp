@@ -1,6 +1,8 @@
 #include <iostream>
 #include "king.h"
 
+#include <cstdlib>
+
 char King::getTar() const //
 {
 	return 'K';

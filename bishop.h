@@ -1,3 +1,6 @@
+#ifndef CHESS_BISHOP_H
+#define CHESS_BISHOP_H
+
 #include "figure.h"
 
 class Bishop: public figure
@@ -11,3 +14,5 @@ public:
 
 	bool moveIsPossible(const desk&, int, int, bool) const;
 };
+
+#endif

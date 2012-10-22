@@ -4,6 +4,7 @@
 #include "king.h"
 #include "bishop.h"
 #include "rook.h"
+#include "queen.h"
 #include "desk.h"
 #include <iostream>
 
@@ -15,7 +16,7 @@ desk::desk()
 	{
 		for (int j=1; j<=8; j++)
 		{
-		vandak[i][j]=nullptr;
+        vandak[i][j]=0;
 		}
 	}
 	check=false;

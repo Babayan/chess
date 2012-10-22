@@ -1,3 +1,6 @@
+#ifndef CHESS_DESK_H
+#define CHESS_DESK_H
+
 #include <string>
 
 class figure;
@@ -44,3 +47,5 @@ public:
 	void printDesk();
 
 };
+
+#endif

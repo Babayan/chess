@@ -1,3 +1,6 @@
+#ifndef CHESS_FIGURE_H
+#define CHESS_FIGURE_H
+
 #include <string>
 
 class desk;
@@ -28,6 +31,4 @@ public:
 	bool isPawnSpecMove() const;
 };
 
-
-
-
+#endif

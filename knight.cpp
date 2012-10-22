@@ -3,6 +3,8 @@
 #include "knight.h"
 #include "desk.h"
 
+#include <cstdlib>
+
 char Knight::getTar() const //
 {
 	return 'N';
