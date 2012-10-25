@@ -46,6 +46,8 @@ public:
 
 	tox& getLastMove() const;
 
+	void pawnReincarnation(int);
+
 	void printDesk();
 
 };

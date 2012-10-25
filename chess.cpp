@@ -143,7 +143,7 @@ public:
 			doska.check=false;
 		}
 
-		if(doska.ThereIsMove(this->getColor())==0) {
+		if(doska.ThereIsMove(this->getColor())==0) { // ay es if um false es grum ashxatuma GGG
 			if(doska.check==true) {
 				cout << endl << "    Xaxn avartvac e" <<endl << this->getName() << "-@ partutyun e krum" << endl <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>";		
 			} else {
@@ -185,6 +185,7 @@ public:
 		
 			if(doska.MoveIsPossible(*pfigure, x2, y2, true) && (doska.KingIsProtected(*pfigure, x2, y2, true))) {
 				doska.setCoordinates(*pfigure, x2, y2);
+				doska.pawnReincarnation(getColor());
 				doska.printDesk();
 				return true;
 			} else {
@@ -193,8 +194,6 @@ public:
 		}
 	}
 };
-
-
 
 int main()
 {

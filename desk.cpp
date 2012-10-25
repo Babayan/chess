@@ -71,8 +71,9 @@ bool desk::ThereIsMove(int color)
 				for(int p=getVandak(i, j)->getX()-2; p<=getVandak(i,j)->getX()+2; p++)
 					for(int q=getVandak(i, j)->getY()-2; q<=getVandak(i, j)->getY()+2; q++)
 					{
+						if (q<1 || q>8 || p<1 ||p >8)
+							continue;
 						if(MoveIsPossible(*getVandak(i, j), p, q, false) && KingIsProtected(*getVandak(i, j), p, q, false))
-							
 						return true;
 					}
 	return false;
@@ -136,10 +137,6 @@ bool desk::MoveIsPossible(const figure& qar, const int x, const int y, bool prin
 			if(printError)
 				cout<<endl<<"Sxal: Texapoxman vandakum duq xaxaqar uneq"<<endl<<endl;
 			return false;
-		}
-		else
-		{
-			//delete enq anum et x,y ketum gtnvox xaxaqary
 		}
 	}
 	return veradardz;
@@ -224,6 +221,40 @@ figure* desk::getKing(int color)
 tox& desk::getLastMove() const
 {
 	return lastmove;
+}
+
+void desk::pawnReincarnation(int color)
+{
+	char tar;
+	if(color==0)
+		for(int i=1; i<=8; i++)
+			if(getVandak(i, 8)!=0 && getVandak(i, 8)->getName()=="Pawn")
+			{
+				cout<<"Dzer peshkan hasel e taxtaki Yezrin, ev duq partavor eq poxarinel ayn hetevyal qareric mekov`"
+				<<endl<<"Mutqagreq"
+				<<endl<<"Q damai verapoxelu hamar"
+				<<endl<<"R navaki verapoxelu hamar"
+				<<endl<<"B pxi verapoxelu hamar"
+				<<endl<<"N dziu verapoxelu hamar"<<endl;
+				cin>>tar;
+				vandak[i][8]=0;
+				if (tar=='Q' || tar=='q')
+				{
+					vandak[i][8]=new Queen(i, 8, color);
+				}
+				if (tar=='R' || tar=='r')
+				{
+					vandak[i][8]=new Rook(i, 8, color);
+				}
+				if (tar=='B' || tar=='b')
+				{
+					vandak[i][8]=new Bishop(i, 8, color);
+				}
+				if (tar=='N' || tar=='n')
+				{
+					vandak[i][8]=new Knight(i, 8, color);
+				}
+			}
 }
 
 void desk::printDesk()
