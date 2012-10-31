@@ -88,13 +88,18 @@ bool desk::ThereIsMove(int color)
 						} catch (error&) {
 							continue;
 						}
-						if(KingIsProtected(*getVandak(i, j), p, q, false))
-							return true;
+
+						try {
+							KingIsProtected(*getVandak(i, j), p, q);
+						} catch(error&) {
+							continue;
+						}
+						return true;
 					}
 	return false;
 }
 
-bool desk::KingIsProtected(figure& qar, const int x, const int y, bool printError)
+void desk::KingIsProtected(figure& qar, const int x, const int y)
 {
 	//paymanakan katarum enq qayl@
 	int x0=qar.getX();
@@ -112,7 +117,6 @@ bool desk::KingIsProtected(figure& qar, const int x, const int y, bool printErro
 	//bolor hakarakordi qareri hamar stugum enq tagavorin utelu hnaravorutyun@
 	for(int i=1; i<=8; i++)
 		for(int j=1; j<=8; j++)
-		{
 			if(getVandak(i, j) && (getVandak(i, j)->getColor()!=guyn))
 			{
 				try {
@@ -120,21 +124,18 @@ bool desk::KingIsProtected(figure& qar, const int x, const int y, bool printErro
 				} catch (error&) {
 					continue;
 				}
-				if(printError)
-					cout<<endl<<"Sxal: Hetevyal qaylov duq harvaci tak eq dnum dzer tagavorin"<<endl<<endl;
 
 				vandak[x][y]=f;
 				vandak[x0][y0]=&qar;
 				qar.setX(x0);
 				qar.setY(y0);
-				return false;
+				throw error("Sxal: Hetevyal qaylov duq harvaci tak eq dnum dzer tagavorin");
 			}
-		}
+
         vandak[x][y]=f;
 		vandak[x0][y0]=&qar;
 		qar.setX(x0);
 		qar.setY(y0);
-		return true;
 }
 
 bool desk::CellIsProtected(const int x, const int y, int guyn) const

@@ -188,17 +188,24 @@ public:
 				std::cout << std::endl << std::endl << "Sxal: " << e.getMessage() << std::endl << std::endl;
 				return false;
 			}
-			if(doska.KingIsProtected(*pfigure, x2, y2, true)) {
-				doska.setCoordinates(*pfigure, x2, y2);
-				doska.pawnReincarnation(getColor());
-				doska.printDesk();
-				return true;
-			} else {
+
+			try {
+				doska.KingIsProtected(*pfigure, x2, y2);
+			} catch (error& e) {
+				std::cout << std::endl << std::endl << "Sxal: " << e.getMessage() << std::endl << std::endl;
 				return false;
 			}
+
+			doska.setCoordinates(*pfigure, x2, y2);
+			doska.pawnReincarnation(getColor());
+			doska.printDesk();
+			return true;
 		}
+
 	}
 };
+
+
 
 int main()
 {

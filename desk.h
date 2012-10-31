@@ -33,7 +33,7 @@ public:
 
 	bool ThereIsMove(int color);
 
-	bool KingIsProtected(figure& qar, const int x, const int y, bool printError);
+	void KingIsProtected(figure& qar, const int x, const int y);
 
 	bool CellIsProtected(const int, const int, int) const;
 
