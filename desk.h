@@ -24,7 +24,10 @@ private:
 
 public:
 	bool check;
+
 	desk();
+
+	~desk();
 
 	bool Check(int guyn);
 
@@ -32,11 +35,15 @@ public:
 
 	bool KingIsProtected(figure& qar, const int x, const int y, bool printError);
 
-	bool MoveIsPossible(const figure& qar, const int x, const int y, bool printError);
+	bool CellIsProtected(const int, const int, int) const;
+
+	void MoveIsPossible(const figure& qar, const int x, const int y) const;
 
 	bool setCoordinates(figure& qar,const int x,const int y);
 
 	bool makeShortCastling(int guyn);
+
+	bool desk::makeLongCastling(int guyn);
 
 	const figure* const getVandak(int x, int y) const;
 

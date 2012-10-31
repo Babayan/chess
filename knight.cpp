@@ -2,6 +2,7 @@
 
 #include "knight.h"
 #include "desk.h"
+#include "exceptions.h"
 
 #include <cstdlib>
 
@@ -20,15 +21,8 @@ Knight::Knight(const int x, const int y, int guyn)
 {
 }
 
-bool Knight::moveIsPossible(const desk&, const int x, const int y, bool printError) const
+void Knight::moveIsPossible(const desk&, const int x, const int y) const
 {
-	if((abs(x-getX())==1 && abs(y-getY())==2) || (abs(x-getX())==2 && abs(y-getY())==1))
-		return true;
-	else
-	{
-		if(printError)
-			std::cout<<std::endl<<"Sxal: Dzin chi karox aydpes sharjvel"<<std::endl<<std::endl;
-		return false;
-	}
-
+	if(!((abs(x-getX())==1 && abs(y-getY())==2) || (abs(x-getX())==2 && abs(y-getY())==1)))
+		throw error("Dzin chi karox aydpes sharjvel");
 }

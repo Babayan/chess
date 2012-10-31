@@ -1,11 +1,12 @@
 ﻿#include "figure.h"
 #include "desk.h"
+#include "exceptions.h"
 #include <iostream>
 #include <string>
 #include <math.h>
 #include <cstdlib>
 
-using namespace std; //s
+using namespace std; 
 
 tox* toxi_dasavorich(std::string x)
 {
@@ -124,15 +125,7 @@ public:
 
 	bool makeShortCastling(desk& doska)
 	{
-		cout<<"mtanq O-O u this->color="<<this->color;
-			int bigudi=this->color;
-			if(doska.makeShortCastling(bigudi)==true)
-				return true;
-			else
-			{
-				cout<<endl<<"Sxal: Duq cheq karox katarel karch rokirovka"<<endl<<endl;
-				return false;
-			}
+		doska.makeShortCastling(color);
 	}
 
 	bool makeMove(desk& doska)
@@ -143,7 +136,7 @@ public:
 			doska.check=false;
 		}
 
-		if(doska.ThereIsMove(this->getColor())==0) { // ay es if um false es grum ashxatuma GGG
+		if(doska.ThereIsMove(getColor())==0) {
 			if(doska.check==true) {
 				cout << endl << "    Xaxn avartvac e" <<endl << this->getName() << "-@ partutyun e krum" << endl <<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>";		
 			} else {
@@ -162,7 +155,13 @@ public:
 
 		figure* pfigure;
 		if (command=="O-O") {
-			return makeShortCastling(doska);
+			return doska.makeShortCastling(color);			
+		}
+		if (command=="O-O-O") {
+			return doska.makeLongCastling(color);			
+		}
+		if (command=="exit") {
+			exit(0);			
 		}
 
 		if(commandIsTrue(command)==false) {
@@ -183,7 +182,13 @@ public:
 			int x2=toxi_dasavorich(command)->coord21;
 			int y2=toxi_dasavorich(command)->coord22;
 		
-			if(doska.MoveIsPossible(*pfigure, x2, y2, true) && (doska.KingIsProtected(*pfigure, x2, y2, true))) {
+			try {
+				doska.MoveIsPossible(*pfigure, x2, y2);
+			} catch (error& e) {
+				std::cout << std::endl << std::endl << "Sxal: " << e.getMessage() << std::endl << std::endl;
+				return false;
+			}
+			if(doska.KingIsProtected(*pfigure, x2, y2, true)) {
 				doska.setCoordinates(*pfigure, x2, y2);
 				doska.pawnReincarnation(getColor());
 				doska.printDesk();

@@ -6,6 +6,7 @@
 #include "rook.h"
 #include "queen.h"
 #include "desk.h"
+#include "exceptions.h"
 #include <iostream>
 
 using namespace std; //
@@ -31,7 +32,7 @@ desk::desk()
 	vandak[1][8] = new Rook(1, 8, 1);
 	vandak[8][8] = new Rook(8, 8, 1);
 
-	vandak[2][1] = new Knight(1, 2, 0);
+	vandak[2][1] = new Knight(2, 1, 0);
 	vandak[7][1] = new Knight(7, 1, 0);
 	vandak[2][8] = new Knight(2, 8, 1);
 	vandak[7][8] = new Knight(7, 8, 1);
@@ -48,17 +49,26 @@ desk::desk()
 	vandak[5][8] = new King(5, 8, 1);
 }
 
+desk::~desk() {
+for(int i=1; i<=8; i++)
+	for(int j=1; j<=8; j++)
+		if(vandak[i][j])
+			delete[] vandak[i][j];
+}
+
 bool desk::Check(int guyn)
 {
 	for(int i=1; i<=8;i++)
 		for(int j=1; j<=8; j++)
 		{
-			if(vandak[i][j]!=0)
-				if((vandak[i][j]->getColor()!=guyn))
-					if ((MoveIsPossible(*vandak[i][j], getKing(guyn)->getX(), getKing(guyn)->getY(), false)))
-					{
-					return true;
-					}
+			if(vandak[i][j]!=0 && vandak[i][j]->getColor()!=guyn) {
+				try {
+					MoveIsPossible(*vandak[i][j], getKing(guyn)->getX(), getKing(guyn)->getY());
+				} catch (error&) {
+					continue;
+				}
+				return true;
+			}
 		}
 		return false;
 }
@@ -67,14 +77,19 @@ bool desk::ThereIsMove(int color)
 {
 	for(int i=1; i<=8; i++)
 		for(int j=1; j<=8; j++)
-			if(getVandak(i,j)!=0 && getVandak(i, j)->getColor()==color)
+			if(getVandak(i, j) && getVandak(i, j)->getColor()==color)
 				for(int p=getVandak(i, j)->getX()-2; p<=getVandak(i,j)->getX()+2; p++)
 					for(int q=getVandak(i, j)->getY()-2; q<=getVandak(i, j)->getY()+2; q++)
 					{
 						if (q<1 || q>8 || p<1 ||p >8)
 							continue;
-						if(MoveIsPossible(*getVandak(i, j), p, q, false) && KingIsProtected(*getVandak(i, j), p, q, false))
-						return true;
+						try {
+							MoveIsPossible(*getVandak(i, j), p, q);
+						} catch (error&) {
+							continue;
+						}
+						if(KingIsProtected(*getVandak(i, j), p, q, false))
+							return true;
 					}
 	return false;
 }
@@ -84,62 +99,78 @@ bool desk::KingIsProtected(figure& qar, const int x, const int y, bool printErro
 	//paymanakan katarum enq qayl@
 	int x0=qar.getX();
 	int y0=qar.getY();
-    vandak[x0][y0]=0;
-	vandak[x][y]=&qar;
+    vandak[x0][y0]=nullptr;
+
+	//stugum enq en vandaky vortex texapoxvum enq qar ka, ete ka hishum enq et qary mi tex
+	figure* f(getVandak(x, y));
+
 	qar.setX(x);
 	qar.setY(y);
+	vandak[x][y]=&qar;
+
 	int guyn=qar.getColor();
 	//bolor hakarakordi qareri hamar stugum enq tagavorin utelu hnaravorutyun@
-	for(int i=1; i<=8;i++)
+	for(int i=1; i<=8; i++)
 		for(int j=1; j<=8; j++)
 		{
-			if(vandak[i][j]!=0)
-				if((vandak[i][j]->getColor()!=guyn))
-					if ((MoveIsPossible(*vandak[i][j], getKing(guyn)->getX(), getKing(guyn)->getY(), false)))
-				{
-					if(printError)
+			if(getVandak(i, j) && (getVandak(i, j)->getColor()!=guyn))
+			{
+				try {
+					MoveIsPossible(*getVandak(i, j), getKing(guyn)->getX(), getKing(guyn)->getY());
+				} catch (error&) {
+					continue;
+				}
+				if(printError)
 					cout<<endl<<"Sxal: Hetevyal qaylov duq harvaci tak eq dnum dzer tagavorin"<<endl<<endl;
 
-                    vandak[x][y]=0;
-					vandak[x0][y0]=&qar;
-					qar.setX(x0);
-					qar.setY(y0);
-					return false;
-				}
+				vandak[x][y]=f;
+				vandak[x0][y0]=&qar;
+				qar.setX(x0);
+				qar.setY(y0);
+				return false;
+			}
 		}
-            vandak[x][y]=0;
-			vandak[x0][y0]=&qar;
-			qar.setX(x0);
-			qar.setY(y0);
-			return true;
+        vandak[x][y]=f;
+		vandak[x0][y0]=&qar;
+		qar.setX(x0);
+		qar.setY(y0);
+		return true;
 }
 
-bool desk::MoveIsPossible(const figure& qar, const int x, const int y, bool printError) // stanuma figuran ev nor coord., ete hnaravora qayl@ veradarcnuma true 
+bool desk::CellIsProtected(const int x, const int y, int guyn) const
 {
-	bool veradardz=false;
+	for(int i=1; i<=8; i++) {
+		for(int j=1; j<=8; j++)
+		{
+			if(getVandak(i, j) && (getVandak(i, j)->getColor()==guyn)) {
+				try {
+					MoveIsPossible(*getVandak(i, j), x, y);
+				} catch (error&) {
+					continue;
+				}
+				return false;
+			}
+		}
+	}
+	return true;
+}
 
+void desk::MoveIsPossible(const figure& qar, const int x, const int y) const// stanuma figuran ev nor coord., ete hnaravora qayl@ veradarcnuma true 
+{
 	if(x<1 ||x>8 ||y<1 ||y>8)
-		return false;
+		throw error("Coordinatner@ sxal en");
 
 	if(qar.getX()==x && qar.getY()==y) //Stugum e, ardyoq xaxaqary texapoxvel e.
 	{
-		if(printError)
-			cout<<endl<<"Sxal: Duq cheq texapoxel xaxaqary"<<endl<<endl;
-		return false;
+		throw error("Duq cheq texapoxel xaxaqary");
 	}
 
-	veradardz=qar.moveIsPossible(*this, x, y, printError);
+	qar.moveIsPossible(*this, x, y);
 
-	if (veradardz==true && getVandak(x,y)!=0)
+	if (getVandak(x,y)!=0 && getVandak(x,y)->getColor()==getVandak(qar.getX(),qar.getY())->getColor())
 	{
-		if (getVandak(x,y)->getColor()==getVandak(qar.getX(),qar.getY())->getColor())
-		{
-			if(printError)
-				cout<<endl<<"Sxal: Texapoxman vandakum duq xaxaqar uneq"<<endl<<endl;
-			return false;
-		}
+		throw error("Texapoxman vandakum duq xaxaqar uneq");
 	}
-	return veradardz;
 }
 
 bool desk::setCoordinates(figure& qar,const int x,const int y)
@@ -152,6 +183,16 @@ bool desk::setCoordinates(figure& qar,const int x,const int y)
 		lastmove.coord21=x;
 		lastmove.coord22=y;
 
+		if(qar.getName()=="King") {
+			King* k=dynamic_cast<King*> (&qar);
+			k->set_moved();
+		}
+
+		if(qar.getName()=="Rook") {
+			Rook* r=dynamic_cast<Rook*> (&qar);
+			r->set_moved();
+		}
+
 		qar.setX(x); 
 		qar.setY(y);
 		vandak[x][y]=&qar;
@@ -160,35 +201,65 @@ bool desk::setCoordinates(figure& qar,const int x,const int y)
 
 bool desk::makeShortCastling(int guyn)
 {
-	cout<<"mtanq makeSHortCastling"<<getVandak(5,1)->getName()<<getVandak(5,1)->getColor()<<getVandak(8,1)->getName();
-	if(guyn==0 && getVandak(5,1)->getName()=="King" && getVandak(5,1)->getColor()==0 && getVandak(6,1)==0 && getVandak(7,1)==0 && getVandak(8,1)->getName()=="Rook" && getVandak(8,1)->getColor()==0) 
+	if(Check(guyn))
 	{
-		cout<<"lala";
-		vandak[7][1]=getVandak(5,1);
-		vandak[5][1]=0;
-		vandak[6][1]=getVandak(8,1);
-		vandak[8][1]=0;
-		getVandak(7,1)->setX(7);
-		getVandak(7,1)->setY(1);
-		getVandak(6,1)->setX(6);
-		getVandak(6,1)->setY(1);
-		printDesk();
-		return true;
+		cout<<"Duq cheq karox katarel karch rokirovka, qani vor gtnvum eq shaxi tak";
+		return false;
 	}
-	if(guyn==1 && getVandak(5,8)->getName()=="King" && getVandak(5,8)->getColor()==1 && getVandak(6,8)==0 && getVandak(7,8)==0 && getVandak(8,8)->getName()=="Rook" && getVandak(8,8)->getColor()==1)
+	int y(8);
+	if(guyn==0)
+		y=1;
+
+	if(getVandak(5,y)->getName()=="King" && getVandak(5,y)->getColor()==guyn && getVandak(6,y)==0 && CellIsProtected(6, y, 1-guyn) && getVandak(7,y)==0 && CellIsProtected(7, y, 1-guyn) && getVandak(8, y)!=0 && getVandak(8,y)->getName()=="Rook" && getVandak(8,y)->getColor()==guyn) 
 	{
-		cout<<"barev azz";
-		vandak[7][8]=getVandak(5,8);
-		vandak[5][8]=0;
-		vandak[6][8]=getVandak(8,8);
-		vandak[8][8]=0;
-		getVandak(7,8)->setX(7);
-		getVandak(7,8)->setY(8);
-		getVandak(6,8)->setX(6);
-		getVandak(6,8)->setY(8);
-		printDesk();
-		return true;
+		
+		King* k=dynamic_cast<King*> (getVandak(5,y));
+		Rook* r=dynamic_cast<Rook*> (getVandak(8,y));
+		if (!(k->is_moved() || r->is_moved()))
+		{
+			vandak[7][y]=getVandak(5,y);
+			vandak[5][y]=0;
+			vandak[6][y]=getVandak(8,y);
+			vandak[8][y]=0;
+			getVandak(7,y)->setX(7);
+			getVandak(6,y)->setX(6);
+			printDesk();
+			return true;
+		}
 	}
+	cout<<endl<<"Sxal: Duq cheq karox katarel karch rokirovka"<<endl<<endl;
+	return false;
+}
+
+bool desk::makeLongCastling(int guyn)
+{
+	if(Check(guyn)) {
+		cout<<"Duq cheq karox katarel karch rokirovka, qani vor gtnvum eq shaxi tak";
+		return false;
+	}
+
+	int y(8);
+	if(guyn==0)
+		y=1;
+
+	if(getVandak(5,y)->getName()=="King" && getVandak(5,y)->getColor()==guyn && getVandak(4,y)==0 && CellIsProtected(4, y, 1-guyn) && getVandak(3,y)==0 && CellIsProtected(3, y, 1-guyn) && getVandak(2,y)==0 && CellIsProtected(2, y, 1-guyn) && getVandak(1, y)!=0 && getVandak(1,y)->getName()=="Rook" && getVandak(1,y)->getColor()==guyn) 
+	{
+		King* k=dynamic_cast<King*> (getVandak(5,y));
+		Rook* r=dynamic_cast<Rook*> (getVandak(8,y));
+
+		if (!(k->is_moved() || r->is_moved())) {
+
+			vandak[3][y]=getVandak(5,y);
+			vandak[5][y]=0;
+			vandak[4][y]=getVandak(1,y);
+			vandak[1][y]=0;
+			getVandak(3,y)->setX(3);
+			getVandak(4,y)->setX(4);
+			printDesk();
+			return true;
+		}
+	}
+	cout<<endl<<"Sxal: Duq cheq karox katarel karch rokirovka"<<endl<<endl;
 	return false;
 }
 
@@ -226,35 +297,44 @@ tox& desk::getLastMove() const
 void desk::pawnReincarnation(int color)
 {
 	char tar;
-	if(color==0)
-		for(int i=1; i<=8; i++)
-			if(getVandak(i, 8)!=0 && getVandak(i, 8)->getName()=="Pawn")
-			{
-				cout<<"Dzer peshkan hasel e taxtaki Yezrin, ev duq partavor eq poxarinel ayn hetevyal qareric mekov`"
-				<<endl<<"Mutqagreq"
-				<<endl<<"Q damai verapoxelu hamar"
-				<<endl<<"R navaki verapoxelu hamar"
-				<<endl<<"B pxi verapoxelu hamar"
-				<<endl<<"N dziu verapoxelu hamar"<<endl;
-				cin>>tar;
-				vandak[i][8]=0;
-				if (tar=='Q' || tar=='q')
-				{
-					vandak[i][8]=new Queen(i, 8, color);
-				}
-				if (tar=='R' || tar=='r')
-				{
-					vandak[i][8]=new Rook(i, 8, color);
-				}
-				if (tar=='B' || tar=='b')
-				{
-					vandak[i][8]=new Bishop(i, 8, color);
-				}
-				if (tar=='N' || tar=='n')
-				{
-					vandak[i][8]=new Knight(i, 8, color);
-				}
-			}
+	int x(0);
+	int y(0);
+	for(int i=1; i<=8; i++) {
+		if(color==0 && getVandak(i, 8)!=0 && getVandak(i, 8)->getName()=="Pawn") {
+			x=i;
+			y=8;
+			break;
+		}
+		if(color==1 && getVandak(i, 1)!=0 && getVandak(i, 1)->getName()=="Pawn") {
+			x=i;
+			y=1; 
+			break;
+		}
+	}
+	if(x)
+	{	
+		cout<<endl<<"Dzer peshkan hasel e taxtaki Yezrin."
+		<<endl<<"Mutqagreq 'Q' damai, 'R' navaki, 'B' pxi kam 'N' dziu ayn verapoxelu hamar"<<endl;
+		cin>>tar;
+//		if (tar!='Q' && tar!='q')
+		vandak[x][y]=0;
+		if (tar=='Q' || tar=='q')
+		{
+			vandak[x][y]=new Queen(x, y, color);
+		}
+		if (tar=='R' || tar=='r')
+		{
+			vandak[x][y]=new Rook(x, y, color);
+		}
+		if (tar=='B' || tar=='b')
+		{
+			vandak[x][y]=new Bishop(x, y, color);
+		}
+		if (tar=='N' || tar=='n')
+		{
+			vandak[x][y]=new Knight(x, y, color);
+		}
+	}
 }
 
 void desk::printDesk()

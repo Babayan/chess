@@ -12,7 +12,7 @@ char getTar() const;
 	
 std::string getName() const;
 
-virtual bool moveIsPossible(const desk&, int, int, bool) const;
+virtual void moveIsPossible(const desk&, int, int) const;
 };
 
 #endif

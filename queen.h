@@ -10,7 +10,7 @@ public:
 	char getTar() const;
 	std::string getName() const;
 	Queen(const int x, const int y, int guyn);
-    bool moveIsPossible(const desk& d, const int x, const int y, bool printError) const;
+    void moveIsPossible(const desk& d, int, int) const;
 };
 
 #endif

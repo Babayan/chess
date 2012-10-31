@@ -12,7 +12,7 @@ public:
 
 	Bishop(const int x, const int y, int guyn);
 
-	bool moveIsPossible(const desk&, int, int, bool) const;
+	void moveIsPossible(const desk&, int, int) const;
 };
 
 #endif

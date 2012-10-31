@@ -27,7 +27,7 @@ public:
 
 	virtual char getTar() const = 0;
 	virtual std::string getName() const = 0;
-	virtual bool moveIsPossible(const desk&, int, int, bool) const = 0;
+	virtual void moveIsPossible(const desk&, int, int) const = 0;
 	bool isPawnSpecMove() const;
 };
 

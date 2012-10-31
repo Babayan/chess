@@ -1,7 +1,23 @@
 #include "rook.h"
 #include "desk.h"
+#include "exceptions.h"
 
 #include <iostream>
+
+Rook::Rook(const int x, const int y, int guyn)
+	: figure(x, y, guyn), madeMove(false)
+{
+}
+
+bool Rook::is_moved() const
+{
+	return madeMove;
+}
+
+void Rook::set_moved()
+{
+	madeMove=true;
+}
 
 char Rook::getTar() const //
 {
@@ -13,12 +29,7 @@ std::string Rook::getName() const
 	return "Rook";
 }
 
-Rook::Rook(const int x, const int y, int guyn)
-	: figure(x, y, guyn)
-{
-}
-
-bool Rook::moveIsPossible(const desk& d, int x, int y, bool printError) const
+void Rook::moveIsPossible(const desk& d, int x, int y) const
 {
 	if(x==getX())
 	{
@@ -28,26 +39,20 @@ bool Rook::moveIsPossible(const desk& d, int x, int y, bool printError) const
 		for(int i=poqr+1; i<mec; i++)
 			if (d.getVandak(x, i))
 			{
-				if(printError)
-					std::cout<<std::endl<<"Sxal: "<<getName()<<" chi karox karox trnel urish qari vrayov"<<std::endl<<std::endl;
-				return false;
+				throw error("Navak@ chi karox karox trnel urish qari vrayov");
 			}
-			return true;
-	}
-	else if(y==getY())
+		return;
+	} else if(y==getY()) {
+		int mec=std::max(x, getX());
+		int poqr=std::min(x, getX());;
+
+
+		for(int i=poqr+1; i<mec; i++)
+		if (d.getVandak(i, y))
 		{
-			int mec=std::max(x, getX());
-			int poqr=std::min(x, getX());;
-
-
-			for(int i=poqr+1; i<mec; i++)
-			if (d.getVandak(i, y))
-			{
-				if(printError)
-					std::cout<<std::endl<<"Sxal: Ladyan chi karox trnel urish qari vrayov"<<std::endl<<std::endl;
-				return false;
-			}
-			return true;
+			throw error("Navak@ chi karox karox trnel urish qari vrayov");
 		}
-		return false;
+		return;
+	}
+	throw error("Navak@ chi karox aydpes sharjvel");
 }

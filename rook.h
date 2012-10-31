@@ -5,14 +5,20 @@
 
 class Rook: public figure //
 {
+private:
+	bool madeMove;
 public:
+	bool is_moved() const;
+
+	void set_moved();
+
 	char getTar() const;
 
 	std::string getName() const;
 
 	Rook(const int x, const int y, int guyn);
 
-	bool moveIsPossible(const desk&, int, int, bool) const;
+	void moveIsPossible(const desk&, int, int) const;
 };
 
 #endif
